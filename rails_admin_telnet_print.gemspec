@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = RailsAdminTelnetPrint::VERSION
   s.authors     = ["Gabriele Tassoni"]
   s.email       = ["gabrieletassoni@taris.it"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of RailsAdminTelnetPrint."
-  s.description = "TODO: Description of RailsAdminTelnetPrint."
+  s.homepage    = "https://www.taris.it"
+  s.summary     = "Printing to a set of predefined IP printers."
+  s.description = "The set of printers must be present in the database."
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
