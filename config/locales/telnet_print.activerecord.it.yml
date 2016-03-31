@@ -1,0 +1,15 @@
+it:
+  activerecord:
+    models:
+      printer:
+        one: Stampante
+        other: Stampanti
+    attributes:
+      printer:
+        name: Nome
+        description: Descrizione
+        ip: Indirizzo IP
+        template: Modello di Stampa
+        qty: Quantità di Barcode Presenti nel Modello di Stampa
+        translation: Matrice di trasformazione
+        used_in: Da usare nella Sezione
