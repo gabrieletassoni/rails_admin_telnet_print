@@ -1,1 +1,26 @@
-Custom Action Telnet Print
+<%-unless @printers.blank?%>
+<table class="table table-condensed">
+<thead>
+<tr>
+<th class="header string_type">Nome</th>
+<th class="header string_type">Descrizione</th>
+<th class="header string_type">Indirizzo</th>
+<th class="header string_type">Numero di Barcode Presenti</th>
+<th class="header string_type">Avvia la Stampa</th>
+</tr>
+</thead>
+<tbody>
+<%-@printers.each do |p|%>
+<tr>
+<td class="string_type"><%=p.name%></td>
+<td class="string_type"><%=p.description%></td>
+<td class="string_type"><%=p.ip%></td>
+<td class="string_type"><%=p.qty%></td>
+<td><%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name, id: @object.id, print_on: p.id)%></td>
+</tr>
+<%-end%>
+</tbody>
+</table>
+<%-else%>
+Nessuna Stampante <a href="<%=rails_admin.index_path(model_name: :printer)%>">configurata</a>
+<%-end%>

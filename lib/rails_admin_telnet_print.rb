@@ -37,16 +37,16 @@ module RailsAdmin
         
         register_instance_option :controller do
           proc do
-            # A cosa ho accesso?
-            # bindings[:controller] is current controller instance
-            # bindings[:abstract_model] is checked abstract model (except root actions)
-            # bindings[:object] is checked instance object (member actions only)
+            if params[:print_on].blank?  
+              # Visualizza la lista di stampanti diponibili    
+              @printers = Printer.assigned_to(@abstract_model.model_name.downcase)
+            else
+              # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
+              # @object è la commissione o sovracollo di partenza
+              PrintItJob.perform_later @object, params[:print_on]
+              redirect_to action: :index
+            end
             
-            Rails.logger.info "I UQNLE CONTROLLER SONO? #{}"
-            
-            # per TESTARE: .has_section? @abstract_controller.model_name.downcase
-            
-            printer = Printer.assigned_to(@abstract_controller.model_name.downcase).first
             
             # TODO bisogna finire questa programmazione
             # hostname = printer.ip
@@ -65,7 +65,7 @@ module RailsAdmin
 #               end
 #             end
             
-            redirect_to back_or_index
+            # redirect_to back_or_index
           end
         end
       end

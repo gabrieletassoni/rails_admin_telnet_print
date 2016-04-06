@@ -5,7 +5,6 @@ class Printer < ActiveRecord::Base
   validates :template, presence: true
   validates :qty, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
-  
 
   # Array holding all the roles
   USED = %i[
