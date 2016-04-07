@@ -1,4 +1,7 @@
 class Printer < ActiveRecord::Base
+  serialize :translation, Hash
+  
+  has_many :print_jobs, dependent: :destroy, inverse_of: :printer
   
   validates :name, presence: true
   validates :ip, presence: true
