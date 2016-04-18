@@ -16,8 +16,7 @@ class SingoloParticolareCommessa < PrintTemplate
 ^FT25,159^A0N,28,28^FH\^FDCODICE STANZA:^FS		'Campo Fisso
 ^FT279,209^A0N,28,28^FH\^FD VAR03 ^FS	        'Variabile Codice Stanza
 ^FT24,212^A0N,28,28^FH\^FDCODICE MOBILE:^FS		'Campo Fisso
-^BY1,3,44^FT64,272^BCN,,Y,N				            'Ini Barcode
-^FD>:BARCODE00^FS					                    'COMMESSA+PONTE+STANZA+MOBILE+NRUNIV
+^BY1,3,44^FT64,272^BCN,,Y,N^FD>:BARCODE00^FS					                    'COMMESSA+PONTE+STANZA+MOBILE+NRUNIV
 ^PQ1							                            'Quantità
 ^XZ
 "
