@@ -1,3 +1,7 @@
+<%-unless params[:print_on].blank?%>
+<div id="info-from-printer" class="well"></div>
+<%-end%>
+
 <%-unless @printers.blank?%>
 <table class="table table-condensed">
 <thead>
@@ -5,7 +9,6 @@
 <th class="header string_type">Nome</th>
 <th class="header string_type">Descrizione</th>
 <th class="header string_type">Indirizzo</th>
-<th class="header string_type">Numero di Barcode Presenti</th>
 <th class="header string_type">Avvia la Stampa</th>
 </tr>
 </thead>
@@ -15,12 +18,35 @@
 <td class="string_type"><%=p.name%></td>
 <td class="string_type"><%=p.description%></td>
 <td class="string_type"><%=p.ip%></td>
-<td class="string_type"><%=p.qty%></td>
-<td><%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name, id: @object.id, print_on: p.id)%></td>
+<td><%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id)%></td>
 </tr>
 <%-end%>
 </tbody>
 </table>
 <%-else%>
 Nessuna Stampante <a href="<%=rails_admin.index_path(model_name: :printer)%>">configurata</a>
+<%-end%>
+
+<%-unless params[:print_on].blank?%>
+<script type="text/javascript">
+//<![CDATA[
+  function performAjaxCall(){
+    $.ajax({
+         type: "GET",// GET in place of POST,
+      url: "<%=rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: params[:print_on])%>",
+         success: function (result) {
+           //do somthing here
+           $('#info-from-printer').html(result);
+         },
+         error: function (){
+           $('#info-from-printer').text("ERRORE: Non riesco a chiedere lo stato della stampa");
+         }
+    });
+  }
+  (function(){
+      // do some stuff
+      setTimeout(performAjaxCall, 2000);
+  })();
+//]]>
+</script>
 <%-end%>

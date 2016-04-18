@@ -4,6 +4,9 @@ it:
       printer:
         one: Stampante
         other: Stampanti
+      print_job:
+        one: Lavoro di Stampa
+        other: Lavori di Stampa
     attributes:
       printer:
         name: Nome
@@ -13,3 +16,11 @@ it:
         qty: Quantità di Barcode Presenti nel Modello di Stampa
         translation: Matrice di trasformazione
         used_in: Da usare nella Sezione
+      print_job:
+        finished: Terminata?
+        printer: Stampante
+        iserror: Errore?
+        description: Descrizione
+        printed: Stampate
+        total: Totale
+        created_at: Orario

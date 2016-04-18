@@ -10,7 +10,7 @@ module RailsAdmin
     module Actions
       class TelnetPrint < RailsAdmin::Config::Actions::Base
         RailsAdmin::Config::Actions.register(self)
-        
+
         register_instance_option :object_level do
           true
         end
@@ -26,7 +26,7 @@ module RailsAdmin
         register_instance_option :collection do
           false
         end
-        
+
         register_instance_option :link_icon do
           'icon-print'
         end
@@ -34,42 +34,40 @@ module RailsAdmin
         register_instance_option :pjax? do
           false
         end
-        
+
         register_instance_option :controller do
           proc do
-            if params[:print_on].blank?  
-              # Visualizza la lista di stampanti diponibili    
-              @printers = Printer.assigned_to(@abstract_model.model_name.downcase)
+            if request.xhr?
+              # Cerco l'informazione se c'è un qualche job in stampa
+              printer = Printer.find(params[:print_on])
+              job = PrintJob.where(printer_id: printer.id).order(updated_at: :desc).first
+
+              message = []
+              if job.blank?
+                message << "Nessun lavoro di stampa è mai stato inviato a questa stampante: <strong>#{printer.ip}</strong>"
+              else
+                number_of_prints = "#{job.printed}/#{job.total}"
+
+                message << "Ultimo lavoro di stampa: <strong>#{printer.ip}:</strong>"
+                message << (job.finished ? "<i>Stampa conclusa (#{number_of_prints})</i> " : "Stampa in corso #{number_of_prints}")
+                message << (job.iserror ? job.description : "Nessun errore rilevato")
+                message << "(#{I18n.l job.created_at})"
+              end
+
+              render html: message.join(" ").html_safe
             else
-              # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
-              # @object è la commissione o sovracollo di partenza
-              PrintItJob.perform_later @object, params[:print_on]
-              redirect_to action: :index
+              @printers = Printer.assigned_to(@abstract_model.model_name.downcase)
+              unless params[:print_on].blank?
+                # Visualizza la lista di stampanti diponibili
+                # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
+                # @object è la commissione o sovracollo di partenza
+                PrintItJob.perform_later @abstract_model.model_name, @object.id, params[:print_on]
+                # redirect_to action: :index
+              end
             end
-            
-            
-            # TODO bisogna finire questa programmazione
-            # hostname = printer.ip
-#             port = 9100
-#
-#             # All Chosen Items
-#             @object.items_with_info.each do |item|
-#               begin
-#                 s = TCPSocket.new(hostname, port)
-#                 # Must create intepolation between item and template
-#                 s.puts(printer.template)
-#                 s.close
-#                 flash[:success] = "Stampa avviata con successo"
-#               rescue
-#                 flash[:error] = "Impossibile connettersi alla stampante"
-#               end
-#             end
-            
-            # redirect_to back_or_index
           end
         end
       end
     end
   end
 end
-
