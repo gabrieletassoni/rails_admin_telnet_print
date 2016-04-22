@@ -37,6 +37,7 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
+            I18n.locale = :it
             if request.xhr?
               # Cerco l'informazione se c'è un qualche job in stampa
               printer = Printer.find(params[:print_on])
