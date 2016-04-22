@@ -31,10 +31,12 @@ class PrintTemplate
       # Se item è stringa vuota (quindi non ha .barcode), allora ritorna il campo FD remmato
       temp.gsub!("BARCODE#{i.to_s.rjust(2, '0')}", (item.barcode rescue "BARCODE#{i.to_s.rjust(2, '0')}"))
     end
-    temp = temp.each_line do |el|
-      puts el unless el =~ 'BARCODE\d\d'
+    # Deleting the lines with BARCODE\d\d in them
+    pivot = ""
+    temp.each_line do |el|
+      pivot += el if /BARCODE\d\d/.match(el).blank?
     end
-    Rails.logger.info temp
-    temp
+    Rails.logger.info pivot
+    pivot
   end
 end
