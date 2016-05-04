@@ -19,9 +19,11 @@
 <td class="string_type"><%=p.description%></td>
 <td class="string_type"><%=p.ip%></td>
 <td>
+  <%-if params[:item_id].blank? %>
   <%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id)%> |
-  <%-unless params[:item_id].blank? %>
-  <%=link_to "Stampa Sigolo", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id, item_id: params[:item_id])%> |
+  <%-else %>
+  <%-citem = ChosenItem.find(params[:item_id]) %>
+  <%=link_to "Stampa #{citem.barcode}", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id, item_id: params[:item_id])%> |
   <%-end%>
   <%=link_to "Annulla", rails_admin.telnet_print_path(cancel: p.id)%>
 </td>
