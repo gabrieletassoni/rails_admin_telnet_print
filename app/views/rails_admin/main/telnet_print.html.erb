@@ -9,7 +9,7 @@
 <th class="header string_type">Nome</th>
 <th class="header string_type">Descrizione</th>
 <th class="header string_type">Indirizzo</th>
-<th class="header string_type">Avvia la Stampa</th>
+<th class="header string_type">Operazioni di Stampa</th>
 </tr>
 </thead>
 <tbody>
@@ -18,7 +18,10 @@
 <td class="string_type"><%=p.name%></td>
 <td class="string_type"><%=p.description%></td>
 <td class="string_type"><%=p.ip%></td>
-<td><%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id)%></td>
+<td>
+  <%=link_to "Stampa", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id)%>
+  <%=link_to "Annulla", rails_admin.telnet_print_path(cancel: p.id)%>
+</td>
 </tr>
 <%-end%>
 </tbody>

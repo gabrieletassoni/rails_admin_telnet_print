@@ -62,8 +62,11 @@ module RailsAdmin
                 # Visualizza la lista di stampanti diponibili
                 # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
                 # @object è la commissione o sovracollo di partenza
-                PrintItJob.perform_later @abstract_model.model_name, @object.id, params[:print_on]
+                PrintItJob.perform_later @abstract_model.model_name, @object.id, params[:print_on] if params[:item_id].blank?
+                PrintSingleJob.perform_later @abstract_model.model_name, @object.id, params[:print_on], params[:item_id] if !params[:item_id].blank?
                 # redirect_to action: :index
+              elsif !params[:cancel].blank?
+                CancelJob.perform_later params[:cancel]
               end
             end
           end
