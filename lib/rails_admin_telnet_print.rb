@@ -58,7 +58,7 @@ module RailsAdmin
               render html: message.join(" ").html_safe
             else
               @printers = Printer.assigned_to(@abstract_model.model_name.downcase)
-              unless params[:print_on].blank?
+              if !params[:print_on].blank?
                 # Visualizza la lista di stampanti diponibili
                 # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
                 # @object è la commissione o sovracollo di partenza
