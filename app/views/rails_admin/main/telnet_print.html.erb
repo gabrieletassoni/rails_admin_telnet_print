@@ -24,7 +24,7 @@
   <%=link_to "Annulla", rails_admin.telnet_print_path(cancel: p.id)%>
   <%-else %>
   <%-citem = ChosenItem.find(params[:item_id]) %>
-  <%=link_to "Stampa #{citem.barcode}", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id, item_id: params[:item_id])%> |
+  <%=link_to "Stampa #{citem.barcode}", rails_admin.telnet_print_path(model_name: @abstract_model.model_name.downcase, id: @object.id, print_on: p.id, item_id: params[:item_id])%>
   <%-end%>
 </td>
 </tr>
