@@ -31,7 +31,7 @@ class PrintSingleJob < ActiveJob::Base
     result = send_to_printer printer.ip, translation
     # Se il risultato è un errore, allora mi fermo completamente e loggo il numero di particolari stampati
     # Rails.logger.info "RISULTATO: #{result}"
-    break unless result
+    return unless result
     @pjob.update(printed: @printed)
     @pjob.update(finished: true)
   end
