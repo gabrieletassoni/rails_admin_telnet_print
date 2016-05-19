@@ -13,7 +13,7 @@ class PrintItJob < ActiveJob::Base
   def perform model_name, id, printer_id
     # Do something later
     printer = Printer.find(printer_id.to_i)
-    print_template = printer.template.constantize
+    print_template = printer.print_template
     #Rails.logger.info "MOMERDA 2: #{model_name.constantize.inspect}"
     header = model_name.constantize.find(id)
     items = header.items_with_info.order(code: :asc)

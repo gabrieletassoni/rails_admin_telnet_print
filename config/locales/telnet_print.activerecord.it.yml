@@ -7,6 +7,9 @@ it:
       print_job:
         one: Lavoro di Stampa
         other: Lavori di Stampa
+      print_template:
+        one: Modello di Stampa
+        other: Modelli di Stampa
     attributes:
       printer:
         name: Nome
@@ -24,3 +27,10 @@ it:
         printed: Stampate
         total: Totale
         created_at: Orario
+        printed_on_total: Stampe Eseguite
+      print_template:
+        name: Nome
+        description: Descrizione
+        template: Modello ZPL
+        number_of_barcodes: Numero di Codici a Barre
+        translation_matrix: Matrice di Traduzione

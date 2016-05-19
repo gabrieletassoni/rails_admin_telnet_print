@@ -1,4 +1,13 @@
 it:
+ admin:
+  actions:
+   telnet_print:
+    title: "Stampa Barcode di Rete"
+    menu: "Stampa per %{model_label} '%{object_label}'"
+    breadcrumb: "Stampa Barcode"
+    link: "Stampa Barcode"
+    bulk_link: "Stampa barcode: %{model_label_plural}"
+    done: "Stampato"
   used_in:
     bundle: Sovracollo
     commission: Barca (Commessa)
