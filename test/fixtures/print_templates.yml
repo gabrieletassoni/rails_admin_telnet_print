@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  template: MyText
+  number_of_barcodes: 1
+  translation_matrix: MyText
+
+two:
+  name: MyString
+  description: MyText
+  template: MyText
+  number_of_barcodes: 1
+  translation_matrix: MyText

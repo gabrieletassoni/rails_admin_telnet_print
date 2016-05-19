@@ -1,29 +1,14 @@
-class PrintTemplate
-  def self.inherited(klass)
-    @descendants ||= []
-    @descendants << klass
-  end
+class PrintTemplate < ActiveRecord::Base
+  has_many :printers, inverse_of: :print_template
 
-  def self.descendants
-    @descendants || []
-  end
-
-  def self.template
-    @TEMPLATE
-  end
-
-  def self.number_of_barcodes
-    @NUMBEROFBARCODES
-  end
-
-  def self.translate args
+  def translate args
     # Rails.logger.info("COME CAZZO SEI FATTO? #{args.inspect}")
-    temp = @TEMPLATE.clone
+    temp = template.clone
     temp.gsub!("TEMPERATURE", args[:temperature].to_s)
-    @NUMBEROFBARCODES.times.with_index do |i|
+    number_of_barcodes.times.with_index do |i|
       #Rails.logger.debug "MAMAMAMA! #{args[:items][i]}"
       item = (ChosenItem.find(args[:items][i]) rescue false)
-      @TRANSLATIONMATRIX.each_pair do |k, v|
+      HashWithIndifferentAccess.new(YAML.load(translation_matrix)).each_pair do |k, v|
         Rails.logger.debug "ITEM: #{item.inspect} AND THE STRING: #{v}"
         temp.gsub!(k, item.is_a?(FalseClass) ? "" : v.split(".").inject(item, :send))
       end
@@ -36,7 +21,27 @@ class PrintTemplate
     temp.each_line do |el|
       pivot += el if /BARCODE\d\d/.match(el).blank?
     end
-    Rails.logger.info pivot
+    Rails.logger.debug pivot
     pivot
+  end
+
+  rails_admin do
+    navigation_label I18n.t(:advanced)
+    parent Printer
+    weight 12
+
+    field :name
+    field :description
+    field :number_of_barcodes
+
+    edit do
+      field :template
+      field :translation_matrix
+    end
+
+    show do
+      field :template
+      field :translation_matrix
+    end
   end
 end
