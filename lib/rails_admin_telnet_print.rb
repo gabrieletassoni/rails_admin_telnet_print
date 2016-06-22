@@ -14,10 +14,11 @@ module RailsAdmin
         register_instance_option :object_level do
           true
         end
+
         # This ensures the action only shows up for Users
         register_instance_option :visible? do
           # visible only if authorized and if the object has a defined method
-          authorized? && bindings[:object].respond_to?(:items_with_info)
+          authorized? && bindings[:object].respond_to?(:records_for_print)
         end
         # We want the action on members, not the Users collection
         register_instance_option :member do
@@ -58,13 +59,14 @@ module RailsAdmin
 
               render html: message.join(" ").html_safe
             else
+              # Se non è una xhr, allora è proprio l'invio di stampa
               @printers = Printer.all # assigned_to(@abstract_model.model_name.downcase)
               if !params[:print_on].blank?
                 # Visualizza la lista di stampanti diponibili
                 # Effettivmaente invia la stampa e torna poi alla index del modello di partenza
                 # @object è la commissione o sovracollo di partenza
                 PrintItJob.perform_later @abstract_model.model_name, @object.id, params[:print_on] if params[:item_id].blank?
-                PrintSingleJob.perform_later @abstract_model.model_name, @object.id, params[:print_on], params[:item_id] if !params[:item_id].blank?
+                # PrintSingleJob.perform_later @abstract_model.model_name, @object.id, params[:print_on], params[:item_id] if !params[:item_id].blank?
                 # redirect_to action: :index
               elsif !params[:cancel].blank?
                 CancelJob.perform_later params[:cancel]

@@ -16,7 +16,7 @@ class PrintItJob < ActiveJob::Base
     print_template = printer.print_template
     #Rails.logger.info "MOMERDA 2: #{model_name.constantize.inspect}"
     header = model_name.constantize.find(id)
-    items = header.items_with_info.order(code: :asc)
+    items = header.records_for_print(id).order(code: :asc)
     @printed = 0
 
     @pjob = PrintJob.create(printer_id: printer.id, finished: false, iserror: false, total: ((items.count.to_f / print_template.number_of_barcodes).ceil rescue 0), printed: @printed)
