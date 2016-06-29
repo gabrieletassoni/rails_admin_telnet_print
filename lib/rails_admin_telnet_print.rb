@@ -68,6 +68,10 @@ module RailsAdmin
                 PrintItJob.perform_later @abstract_model.model_name, @object.id, params[:print_on] if params[:item_id].blank?
                 # PrintSingleJob.perform_later @abstract_model.model_name, @object.id, params[:print_on], params[:item_id] if !params[:item_id].blank?
                 # redirect_to action: :index
+                unless params[:back_to].blank?
+                  # http://localhost:3000/app/scan_item_barcode
+                  redirect_to rails_admin.send(params[:back_to].to_sym, print_on: params[:print_on], chosen_item_id: @object.id)
+                end
               elsif !params[:cancel].blank?
                 CancelJob.perform_later params[:cancel]
               end

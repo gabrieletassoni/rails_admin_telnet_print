@@ -8,6 +8,8 @@ class Printer < ActiveRecord::Base
   validates :ip, presence: true
   validates :temperature, presence: true
   validates :print_template, presence: true
+
+  # before_save :check_if_unique_default
   # validates :qty, presence: true, numericality: { only_integer: true, greater_than: 0 }
   # validates :translation, presence: true
 
@@ -43,6 +45,7 @@ class Printer < ActiveRecord::Base
 
     field :name
     field :ip
+    field :default, :toggle
     field :temperature
     field :print_template
     # field :used_in
@@ -54,4 +57,10 @@ class Printer < ActiveRecord::Base
       end
     end
   end
+  # private
+  # def check_if_unique_default
+  #   if self.default?
+  #     Printer.where.not(id: self.id)
+  #   end
+  # end
 end
