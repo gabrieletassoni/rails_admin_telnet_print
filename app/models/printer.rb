@@ -1,4 +1,4 @@
-class Printer < ActiveRecord::Base
+class Printer < ApplicationRecord
   #serialize :translation, Hash
 
   has_many :print_jobs, dependent: :destroy, inverse_of: :printer

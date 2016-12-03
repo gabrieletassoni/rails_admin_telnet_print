@@ -1,4 +1,4 @@
-class CancelJob < ActiveJob::Base
+class CancelJob < ApplicationJob
   queue_as :default
 
   # Legenda errori:

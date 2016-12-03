@@ -1,4 +1,4 @@
-class PrintTemplate < ActiveRecord::Base
+class PrintTemplate < ApplicationRecord
   has_many :printers, inverse_of: :print_template
 
   def translate args

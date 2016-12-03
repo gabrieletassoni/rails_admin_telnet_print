@@ -1,4 +1,4 @@
-class PrintJob < ActiveRecord::Base
+class PrintJob < ApplicationRecord
   belongs_to :printer, inverse_of: :print_jobs
 
   def printed_on_total

@@ -1,4 +1,4 @@
-class PrintItJob < ActiveJob::Base
+class PrintItJob < ApplicationJob
   queue_as :default
 
   # Legenda errori:
