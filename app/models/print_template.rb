@@ -26,7 +26,8 @@ class PrintTemplate < ApplicationRecord
   end
 
   rails_admin do
-    navigation_label I18n.t(:advanced)
+    navigation_label I18n.t("admin.settings.label")
+    navigation_icon 'fa fa-file-text'
     parent Printer
     weight 12
 

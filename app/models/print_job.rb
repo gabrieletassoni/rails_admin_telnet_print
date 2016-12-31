@@ -6,7 +6,8 @@ class PrintJob < ApplicationRecord
   end
 
   rails_admin do
-    navigation_label I18n.t(:advanced)
+    navigation_label I18n.t("admin.settings.label")
+    navigation_icon 'fa fa-check-square'
     parent Printer
     weight 13
 
