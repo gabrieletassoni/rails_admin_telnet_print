@@ -1,3 +1,14 @@
+require 'thecore'
+
+# require 'models/print_job'
+# require 'models/print_template'
+# require 'models/printer'
+#
+# require 'jobs/application_job'
+# require 'jobs/cancel_job'
+# require 'jobs/print_it_job'
+# require 'jobs/print_single_job'
+
 require "rails_admin_telnet_print/engine"
 
 module RailsAdminTelnetPrint
