@@ -39,22 +39,24 @@ class Printer < ApplicationRecord
   #   where(used_in: (USED.index(section.to_sym) + 1))
   # end
 
-  rails_admin do
-    navigation_label I18n.t("admin.settings.label")
-    navigation_icon 'fa fa-print'
-    weight 11
+  RailsAdmin.config do |config|
+    config.model 'Printer' do
+      navigation_label I18n.t("admin.settings.label")
+      navigation_icon 'fa fa-print'
+      weight 11
 
-    field :name
-    field :ip
-    field :default, :toggle
-    field :temperature
-    field :print_template
-    # field :used_in
-    field :description
+      field :name
+      field :ip
+      field :default, :toggle
+      field :temperature
+      field :print_template
+      # field :used_in
+      field :description
 
-    list do
-      configure :description do
-        visible false
+      list do
+        configure :description do
+          visible false
+        end
       end
     end
   end

@@ -25,24 +25,26 @@ class PrintTemplate < ApplicationRecord
     pivot
   end
 
-  rails_admin do
-    navigation_label I18n.t("admin.settings.label")
-    navigation_icon 'fa fa-file-text'
-    parent Printer
-    weight 12
+  RailsAdmin.config do |config|
+    config.model 'PrintTemplate' do
+      navigation_label I18n.t("admin.settings.label")
+      navigation_icon 'fa fa-file-text'
+      parent Printer
+      weight 12
 
-    field :name
-    field :description
-    field :number_of_barcodes
+      field :name
+      field :description
+      field :number_of_barcodes
 
-    edit do
-      field :template
-      field :translation_matrix
-    end
+      edit do
+        field :template
+        field :translation_matrix
+      end
 
-    show do
-      field :template
-      field :translation_matrix
+      show do
+        field :template
+        field :translation_matrix
+      end
     end
   end
 end
