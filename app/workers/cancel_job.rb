@@ -1,5 +1,9 @@
-class CancelJob < ApplicationJob
-  queue_as :default
+# require 'sidekiq-scheduler'
+
+class ImportFromFtpWorker
+  include Sidekiq::Worker
+
+  # def perform(*args)
 
   # Legenda errori:
   # TIMEOUT: indirizzo della stampante non raggiungibile durante la stampa

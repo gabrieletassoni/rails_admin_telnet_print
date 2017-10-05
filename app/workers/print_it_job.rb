@@ -1,6 +1,9 @@
-class PrintSingleJob < ApplicationJob
-  queue_as :default
+# class PrintItJob < ApplicationJob
+#   queue_as :default
+# require 'sidekiq-scheduler'
 
+class ImportFromFtpWorker
+  include Sidekiq::Worker
   # Legenda errori:
   # TIMEOUT: indirizzo della stampante non raggiungibile durante la stampa
   # UNREACHABLE: indirizzo della stampante non raggiungibile durante il controllo dello stato della stampante
@@ -10,28 +13,30 @@ class PrintSingleJob < ApplicationJob
   # PAUSE: stampante in pausa
   # OK: nessun errore
 
-  def perform model_name, id, printer_id, item_id
+  def perform model_name, id, printer_id
     # Do something later
     printer = Printer.find(printer_id.to_i)
     print_template = printer.print_template
     #Rails.logger.info "MOMERDA 2: #{model_name.constantize.inspect}"
     header = model_name.constantize.find(id)
-    item = ChosenItem.find(item_id)
+    items = header.records_for_print(id).order(code: :asc)
     @printed = 0
 
-    @pjob = PrintJob.create(printer_id: printer.id, finished: false, iserror: false, total: 1, printed: @printed)
+    @pjob = PrintJob.create(printer_id: printer.id, finished: false, iserror: false, total: ((items.count.to_f / print_template.number_of_barcodes).ceil rescue 0), printed: @printed)
     # Spezzetto l'array degli items in gruppi di number_of_barcodes
     # Rails.logger.info "BELLAAAAAAA! #{items.group_by.with_index{|_, i| i % print_template.number_of_barcodes}.values.inspect}"
-
-    # Rails.logger.info "ITEMGROUP: #{item_group.inspect}"
-
-    # Rails.logger.info "AAAAHHHHHHHHHH: #{barcodes.inspect}"
-    translation = print_template.translate(header: header, items: [item.id], temperature: printer.temperature)
-    # Rails.logger.info "BARCODES: #{barcodes.inspect}"
-    result = send_to_printer printer.ip, translation
-    # Se il risultato è un errore, allora mi fermo completamente e loggo il numero di particolari stampati
-    # Rails.logger.info "RISULTATO: #{result}"
-    return unless result
+    items.each_slice(print_template.number_of_barcodes) do |item_group|
+      # Rails.logger.info "ITEMGROUP: #{item_group.inspect}"
+      barcodes = item_group.map(&:id)
+      barcodes = barcodes.fill("", barcodes.length..(print_template.number_of_barcodes - 1)) if print_template.number_of_barcodes > barcodes.length
+      # Rails.logger.info "AAAAHHHHHHHHHH: #{barcodes.inspect}"
+      translation = print_template.translate(header: header, items: barcodes, temperature: printer.temperature)
+      # Rails.logger.info "BARCODES: #{barcodes.inspect}"
+      result = send_to_printer printer.ip, translation
+      # Se il risultato è un errore, allora mi fermo completamente e loggo il numero di particolari stampati
+      # Rails.logger.info "RISULTATO: #{result}"
+      break unless result
+    end
     @pjob.update(printed: @printed)
     @pjob.update(finished: true)
   end
