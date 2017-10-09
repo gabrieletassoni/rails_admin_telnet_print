@@ -21,7 +21,7 @@ class PrintTemplate < ApplicationRecord
     temp.each_line do |el|
       pivot += el if /BARCODE\d\d/.match(el).blank?
     end
-    Rails.logger.debug pivot
+    Rails.logger.info pivot
     pivot
   end
 
