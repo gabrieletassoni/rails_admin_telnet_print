@@ -1,7 +1,5 @@
-# require 'sidekiq-scheduler'
-
-class ImportFromFtpWorker
-  include Sidekiq::Worker
+class CancelJob < ApplicationJob
+  queue_as :default
 
   # def perform(*args)
 
