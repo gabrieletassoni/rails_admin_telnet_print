@@ -1,4 +1,4 @@
-class ReassignTemplates < ActiveRecord::Migration
+class ReassignTemplates < ActiveRecord::Migration[4.2]
   def change
     # ["SingoloParticolareCommessa", "MultiParticolareCommessa", "SingoloParticolareCommessa", "SingoloParticolareCommessa"]
     transform = {
