@@ -1,5 +1,5 @@
 require 'thecore'
-require 'thecore_background_jobs'
+# require 'thecore_background_jobs'
 
 # require 'models/print_job'
 # require 'models/print_template'
