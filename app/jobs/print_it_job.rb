@@ -13,7 +13,7 @@ class PrintItJob < ApplicationJob
     # Do something later
     printer = Printer.find(printer_id.to_i)
     print_template = printer.print_template
-    Rails.logger.info "PrintItJob: PRINTING MODEL: #{model_name.constantize.inspect}"
+    Rails.logger.info "PrintItJob: PRINTING MODEL: #{model_name}"
     header = model_name.constantize.find(id)
     items = header.records_for_print(id).order(code: :asc)
 
@@ -25,14 +25,14 @@ class PrintItJob < ApplicationJob
       # Rails.logger.info "ITEMGROUP: #{item_group.inspect}"
       barcodes = item_group.map(&:id)
       barcodes = barcodes.fill("", barcodes.length..(print_template.number_of_barcodes - 1)) if print_template.number_of_barcodes > barcodes.length
-      # Rails.logger.info "AAAAHHHHHHHHHH: #{barcodes.inspect}"
+      Rails.logger.info "PrintItJob: PASSING THESE IDs TO TEMPLATE: #{barcodes.inspect}"
       pivot.push print_template.translate(header: header, items: barcodes, temperature: printer.temperature)
       # Rails.logger.info "BARCODES: #{barcodes.inspect}"
       # Se il risultato è un errore, allora mi fermo completamente e loggo il numero di particolari stampati
       # Rails.logger.info "RISULTATO: #{result}"
     end
 
-    Rails.logger.info "PrintItJob: SENDING TO PRINTER, TEXT TO PRINT IS:\n #{pivot.inspect}"
+    # Rails.logger.info "PrintItJob: SENDING TO PRINTER, TEXT TO PRINT IS:\n #{pivot.inspect}"
     result = pivot.empty? ? false : send_to_printer(printer.ip, pivot.join(""))
     @pjob.update(printed: (result ? pivot.length : 0)) # Se risultato true, allora ha stampato tutto, altrimenti non ha stampato nulla
     @pjob.update(total: pivot.length) # In realtà è inutile, ora manda tutto quello che può alla stampante, solo lei può andare storta
@@ -74,7 +74,7 @@ class PrintItJob < ApplicationJob
         break if response.count == 3
       end
       s.close
-      Rails.logger.info response.inspect
+      Rails.logger.info "PrintIt: RESPONSE: #{response.inspect}"
       first = response[0].split(",")
       second = response[1].split(",")
       return "HEAD UP" if second[2].to_i == 1
@@ -83,6 +83,7 @@ class PrintItJob < ApplicationJob
       return "PAUSE" if first[2].to_i == 1
       return "OK"
     rescue
+      Rails.logger.info "PrintIt: STATUS: UNREACHABLE"
       return "UNREACHABLE"
     end
   end
